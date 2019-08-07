@@ -1,8 +1,0 @@
-include ../../common/make.defs
-runfenix: runfenix.in
-	@echo PATH=$(ULFMTOP)/bin:$(PATH) > runfenix
-	@cat runfenix.in >> runfenix
-	@chmod u+x runfenix
-
-veryclean:
-	rm -f runfenix
