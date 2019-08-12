@@ -1,0 +1,3 @@
+      OUT(i,j) = OUT(i,j) +
+        +WEIGHT(,)*IN(i,j)
+        ;
