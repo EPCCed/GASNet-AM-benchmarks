@@ -283,7 +283,17 @@ inline void aml_send_intra(void *src, int type, int length, int local, int from)
 }
 
 SOATTR void aml_send(void *src, int type,int length, int node ) {
-	if ( node == myproc )
+	
+#ifdef PRINT_MSG_DATA
+    if(length % sizeof(int) == 0)
+    {
+        printf("send integers [");
+        for(int i=0; i<length/sizeof(int); ++i) printf(" %d", *((int *)src+i));
+        printf(" ] to node %d\n", node);
+    }
+#endif
+    
+    if ( node == myproc )
 		return aml_handlers[type](myproc,src,length);
 
 	int group = GROUP_FROM_PROC(node);

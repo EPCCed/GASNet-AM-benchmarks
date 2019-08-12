@@ -33,6 +33,6 @@ extern "C" {
 #define num_pes aml_n_pes
 
 #define aml_time() MPI_Wtime()
-#define aml_long_allsum(p) MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_SUM,MPI_COMM_WORLD)
-#define aml_long_allmin(p) MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_MIN,MPI_COMM_WORLD)
-#define aml_long_allmax(p) MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_MAX,MPI_COMM_WORLD)
+#define aml_long_allsum(p) aml_barrier(); MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_SUM,MPI_COMM_WORLD); MPI_Barrier(MPI_COMM_WORLD);
+#define aml_long_allmin(p) aml_barrier(); MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_MIN,MPI_COMM_WORLD); MPI_Barrier(MPI_COMM_WORLD);
+#define aml_long_allmax(p) aml_barrier(); MPI_Allreduce(MPI_IN_PLACE,p,1,MPI_LONG_LONG,MPI_MAX,MPI_COMM_WORLD); MPI_Barrier(MPI_COMM_WORLD);
