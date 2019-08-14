@@ -26,7 +26,7 @@ The makefile in the src-folder requires a environment variable TARGET (= 'mpi' |
 
 # GASNet configurations
 
-All GASNet-configurations were compiled with the compile-flag '-fPIC'.
+All GASNet-configurations were compiled with a gcc-compiler and the compile-flag '-fPIC'.
 During all runs the variable GASNET_MPI_THREAD=SERIALIZED was set.
 
 ## ARCHER 
@@ -37,8 +37,12 @@ ARCHER is a cluster based on the Aries-interconnect. More details about hardware
 
 ## CIRRUS
 
-CIRRUS is a cluster based on a Infiniband-interconnect. More details about hardware can be found [here](http://www.cirrus.ac.uk/about/hardware.html). For the test, the ibv-conduit was used, with some special compile-flags (to workaround some runtime warnings/errors):
+CIRRUS is a cluster based on an Infiniband-interconnect. More details about hardware can be found [here](http://www.cirrus.ac.uk/about/hardware.html). For the test, the ibv-conduit was used, with some special compile-flags (to workaround some runtime warnings/errors):
 
-    ../configure --prefix=$GASNET_INSTALL_DIR --disable-ibv-odp --with-ibv-physmem-max=4G --disable-ibv-xrc --enable-pshm-sysv --disable-pshm-posix  CC="gcc -fPIC" CXX="g++ -fPIC" MPICC="mpicc -fPIC"
+    ../configure --prefix=$GASNET_INSTALL_DIR --disable-ibv-odp --with-ibv-physmem-max=4G --disable-ibv-xrc --enable-pshm-sysv --disable-pshm-posix CC="gcc -fPIC" CXX="g++ -fPIC" MPICC="mpicc -fPIC"
     
+## Fulhame
 
+Fulhame is an experimental cluster based on ARMv8-CPUs and an Infiniband-interconnect. For the test, ibv-conduit with the following configuration was used:
+
+    ../configure --prefix=/home/fh04/fh04/bhuth/GASNet/local --enable-ibv-multirail --with-ibv-max-hcas=4 --with-ibv-physmem-max=4G CC="gcc -fPIC" CXX="g++ -fPIC" MPICC="mpicc -fPIC"
