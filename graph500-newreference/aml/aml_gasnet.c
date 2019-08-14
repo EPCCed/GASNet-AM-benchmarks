@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gasnet.h>
+#include <stdbool.h>
 #include <mpi.h>
 
 #include "aml.h"
-
-#define TRUE 1
-#define FALSE 0
 
 #define BARRIER()                                           \
 do {                                                        \
@@ -23,7 +21,7 @@ struct remote_memory_t
 {
     void *addr;
     size_t size;
-    int avail;
+    bool avail;
 };
 
 /* node information */
@@ -76,7 +74,7 @@ void long_reply_handler(gasnet_token_t token)
 {
     gasnet_node_t src_node;
     gasnet_AMGetMsgSource (token , &src_node);
-    remote_addresses[src_node].avail = TRUE;
+    remote_addresses[src_node].avail = true;
 }
 
 /* init GASNet */
@@ -103,7 +101,7 @@ int aml_init(int *argc_ptr,char ***argv_ptr)
         
     /* allocate memory */
     seginfo_table    = (gasnet_seginfo_t *)malloc( nodes*sizeof(gasnet_seginfo_t) );
-    remote_addresses = (struct remote_memory_t *)malloc( (nodes-1)*sizeof(struct remote_memory_t) );
+    remote_addresses = (struct remote_memory_t *)malloc( nodes*sizeof(struct remote_memory_t) );
         
     if( !seginfo_table || !remote_addresses )
     {
@@ -135,7 +133,7 @@ int aml_init(int *argc_ptr,char ***argv_ptr)
             size_t my_index = rank < my_node ? my_node-1 : my_node;
             rm.size = seginfo_table[rank].size / (nodes-1);
             rm.addr = (char *)seginfo_table[rank].addr + my_index * rm.size;
-            rm.avail = TRUE;
+            rm.avail = true;
             
             remote_addresses[rank] = rm;
         }
@@ -241,13 +239,13 @@ void aml_send(void *srcaddr, int n,int length, int node )
         }
 //         else if( length < gasnet_AMMaxLongRequest() && length < remote_addresses[node].size )
 //         {
-//             if( remote_addresses[node].avail == FALSE )
+//             if( remote_addresses[node].avail == false )
 //             {
-//                 GASNET_BLOCKUNTIL( remote_addresses[node].avail == TRUE );
+//                 GASNET_BLOCKUNTIL( remote_addresses[node].avail == true );
 //             }
 //             
 //             gasnet_AMRequestLong1(node, medlong_handler_id, srcaddr, length, remote_addresses[node].addr, n);
-//             remote_addresses[node].avail = FALSE;
+//             remote_addresses[node].avail = false;
 //         }
         else
         {
